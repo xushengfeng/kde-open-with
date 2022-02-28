@@ -20,18 +20,18 @@ int main(int argc, char *argv[])
     QMimeType mime = db.mimeTypeForFile("./main.cpp");
 
     QAction *act = nullptr;
-    QMenu menu;
+    QMenu *menu=new QMenu;
     QPoint p = QCursor::pos();
     const KService::List offers = KApplicationTrader::queryByMimeType(mime.name());
     for (const auto &service : offers) {
         qDebug() << service->entryPath();
-        act = menu.addAction(QIcon::fromTheme(service->icon()), service->name());
+        act = menu->addAction(QIcon::fromTheme(service->icon()), service->name());
         act->setData(service->entryPath());
     }
-    act = menu.addAction("其他");
+    act = menu->addAction("其他");
     act->setData(QString());
 
-    menu.exec(p);
+    menu->exec(p);
     return a.exec();
 }
 
