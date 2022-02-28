@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(untitled VERSION 0.1 LANGUAGES CXX)
+project(kde_open_with VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -18,36 +18,37 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
+        mainwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(untitled
+    qt_add_executable(kde_open_with
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET untitled APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET kde_open_with APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(untitled SHARED
+        add_library(kde_open_with SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(untitled
+        add_executable(kde_open_with
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
 find_package(KF5KIO)
-target_link_libraries(untitled PRIVATE KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::KIONTLM)
-target_link_libraries(untitled PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(kde_open_with PRIVATE KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::KIONTLM)
+target_link_libraries(kde_open_with PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set_target_properties(untitled PROPERTIES
+set_target_properties(kde_open_with PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -56,5 +57,5 @@ set_target_properties(untitled PROPERTIES
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(untitled)
+    qt_finalize_executable(kde_open_with)
 endif()
