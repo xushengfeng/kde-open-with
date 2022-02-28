@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "widget.h"
 
 #include <QApplication>
 #include <KIO/ApplicationLauncherJob>
@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    Widget w;
     QList<QUrl> list;
     list << QUrl(argv[1]);
     auto *job = new KIO::ApplicationLauncherJob();
