@@ -9,7 +9,6 @@
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QDebug>
-#include <QVBoxLayout>
 #include <QtWidgets>
 
 int main(int argc, char *argv[])
@@ -19,23 +18,26 @@ int main(int argc, char *argv[])
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForFile("./main.cpp");
 
-    QVBoxLayout *layout = new QVBoxLayout;
-
+    QAction *act = nullptr;
+    QMenu menu;
+    QPoint p;
+    p.setX(0);
+    p.setY(0);
     const KService::List offers = KApplicationTrader::queryByMimeType(mime.name());
     for (const auto &service : offers) {
         qDebug()<<service->entryPath();
-        QPushButton *button = new QPushButton;
-        button->setIcon(QIcon::fromTheme(service->icon()));
-        button->setText(service->name());
-        layout->addWidget(button);
+        act = menu.addAction(QIcon::fromTheme(service->icon()), service->name());
+        act ->setData(service->entryPath());
     }
-    w.setLayout(layout);
-    w.show();
+    act = menu.addAction("其他");
+
     QList<QUrl> list;
     list << QUrl(argv[1]);
     auto *job = new KIO::ApplicationLauncherJob();
     job->setUrls(list);
     job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, &w));
 //    job->start();
+
+    menu.exec();
     return a.exec();
 }
