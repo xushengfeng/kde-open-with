@@ -29,14 +29,20 @@ int main(int argc, char *argv[])
         act->setData(service->entryPath());
     }
     act = menu.addAction("其他");
-
-    QList<QUrl> list;
-    list << QUrl(argv[1]);
-    auto *job = new KIO::ApplicationLauncherJob();
-    job->setUrls(list);
-    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, &w));
-    //    job->start();
+    act->setData(QString());
 
     menu.exec(p);
     return a.exec();
+}
+
+void Widget::open(QAction *act,int argc, char *argv[])
+{
+    QList<QUrl> list;
+    list << QUrl(argv[1]);
+    KService::Ptr app = KService::serviceByDesktopPath(act->data().toString());
+    // If app is null, ApplicationLauncherJob will invoke the open-with dialog
+    auto *job = new KIO::ApplicationLauncherJob(app);
+    job->setUrls(list);
+    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, this));
+    job->start();
 }
