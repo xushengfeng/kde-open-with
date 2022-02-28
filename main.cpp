@@ -1,14 +1,15 @@
 #include "widget.h"
 
-#include <QApplication>
+#include <KApplicationTrader>
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/Job>
 #include <KIO/JobUiDelegate>
-#include <KApplicationTrader>
+#include <QApplication>
+#include <QCursor>
+#include <QDebug>
 #include <QList>
 #include <QMenu>
 #include <QMimeDatabase>
-#include <QDebug>
 #include <QtWidgets>
 
 int main(int argc, char *argv[])
@@ -20,14 +21,12 @@ int main(int argc, char *argv[])
 
     QAction *act = nullptr;
     QMenu menu;
-    QPoint p;
-    p.setX(0);
-    p.setY(0);
+    QPoint p = QCursor::pos();
     const KService::List offers = KApplicationTrader::queryByMimeType(mime.name());
     for (const auto &service : offers) {
-        qDebug()<<service->entryPath();
+        qDebug() << service->entryPath();
         act = menu.addAction(QIcon::fromTheme(service->icon()), service->name());
-        act ->setData(service->entryPath());
+        act->setData(service->entryPath());
     }
     act = menu.addAction("其他");
 
@@ -36,8 +35,8 @@ int main(int argc, char *argv[])
     auto *job = new KIO::ApplicationLauncherJob();
     job->setUrls(list);
     job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, &w));
-//    job->start();
+    //    job->start();
 
-    menu.exec();
+    menu.exec(p);
     return a.exec();
 }
