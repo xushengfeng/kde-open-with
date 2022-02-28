@@ -23,10 +23,11 @@ int main(int argc, char *argv[])
 
     const KService::List offers = KApplicationTrader::queryByMimeType(mime.name());
     for (const auto &service : offers) {
-        qDebug()<<service->name();
-        QLabel *l=new QLabel;
-        l->setText(service->name());
-        layout->addWidget(l);
+        qDebug()<<service->entryPath();
+        QPushButton *button = new QPushButton;
+        button->setIcon(QIcon::fromTheme(service->icon()));
+        button->setText(service->name());
+        layout->addWidget(button);
     }
     w.setLayout(layout);
     w.show();
