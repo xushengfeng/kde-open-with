@@ -9,16 +9,18 @@
 #include <QList>
 #include <QMenu>
 #include <QMimeDatabase>
-#include <QtWidgets>
 
 QString arg;
+int xx = 0;
 
 int main(int argc, char *argv[])
 {
     arg = argv[1];
     QApplication a(argc, argv);
     Widget w;
-    // return a.exec();
+    if (xx != 0) {
+        return a.exec();
+    }
 }
 
 Widget::Widget(QWidget *parent)
@@ -37,8 +39,10 @@ Widget::Widget(QWidget *parent)
         act = menu->addAction(QIcon::fromTheme(service->icon()), service->name());
         act->setData(service->entryPath());
     }
-    act = menu->addAction("其他");
-    act->setData(QString());
+    QAction *other_act = nullptr;
+    other_act = menu->addAction("其他");
+    other_act->setData(QString());
+    connect(other_act, &QAction::triggered, this, [=]() { xx = 1; });
 
     connect(menu, &QMenu::triggered, this, &Widget::open);
     connect(menu, &QMenu::aboutToHide, this, [=]() { qApp->exit(); });
