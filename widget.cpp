@@ -39,8 +39,9 @@ Widget::Widget(QWidget *parent)
         act = menu->addAction(QIcon::fromTheme(service->icon()), service->name());
         act->setData(service->entryPath());
     }
+    menu->addSeparator();
     QAction *other_act = nullptr;
-    other_act = menu->addAction("其他");
+    other_act = menu->addAction("其他应用程序打开");
     other_act->setData(QString());
     connect(other_act, &QAction::triggered, this, [=]() { xx = 1; });
 
