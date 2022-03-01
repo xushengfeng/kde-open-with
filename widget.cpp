@@ -10,15 +10,26 @@
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QtWidgets>
+
+QString arg;
+
+int main(int argc, char *argv[])
+{
+    arg = argv[1];
+    QApplication a(argc, argv);
+    Widget w;
+    return a.exec();
+}
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
 
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile("./main.cpp");
+    QMimeType mime = db.mimeTypeForFile(arg);
 
     QAction *act = nullptr;
-    QMenu *menu=new QMenu;
+    QMenu *menu = new QMenu;
     QPoint p = QCursor::pos();
     const KService::List offers = KApplicationTrader::queryByMimeType(mime.name());
     for (const auto &service : offers) {
@@ -29,8 +40,7 @@ Widget::Widget(QWidget *parent)
     act = menu->addAction("其他");
     act->setData(QString());
 
-    connect(menu, &QMenu::triggered,this
-            , &Widget::open);
+    connect(menu, &QMenu::triggered, this, &Widget::open);
     menu->exec(p);
 }
 
@@ -40,7 +50,7 @@ Widget::~Widget()
 void Widget::open(QAction *act)
 {
     QList<QUrl> list;
-    list << QUrl();
+    list << QUrl(arg);
     KService::Ptr app = KService::serviceByDesktopPath(act->data().toString());
     // If app is null, ApplicationLauncherJob will invoke the open-with dialog
     auto *job = new KIO::ApplicationLauncherJob(app);
