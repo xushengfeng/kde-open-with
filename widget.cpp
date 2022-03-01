@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     arg = argv[1];
     QApplication a(argc, argv);
     Widget w;
-    return a.exec();
+    // return a.exec();
 }
 
 Widget::Widget(QWidget *parent)
@@ -41,6 +41,7 @@ Widget::Widget(QWidget *parent)
     act->setData(QString());
 
     connect(menu, &QMenu::triggered, this, &Widget::open);
+    connect(menu, &QMenu::aboutToHide, this, [=]() { qApp->exit(); });
     menu->exec(p);
 }
 
